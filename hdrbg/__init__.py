@@ -8,7 +8,7 @@ class DRBG_SHA2_512:
 
     HASH = 'SHA-512'  # name of the hash as it is specified in NIST CAVP test 'rsp' files
     HASH_DIGEST_SIZE = 512 // 8
-    SECURITY_STRENGTH = 256
+    SECURITY_STRENGTH = 512 // 2
     SEEDLEN = 888
     SEED_SIZE = SEEDLEN // 8
     RESEED_INTERVAL = 2**48
@@ -44,13 +44,13 @@ class DRBG_SHA2_512:
         """Initialize a DRBG instance."""
 
         if len(entropy) * 8 < self.SECURITY_STRENGTH:
-            raise RuntimeError(f'entropy must have at least {self.SECURITY_STRENGTH} bits')
+            raise RuntimeError(f'entropy must have at least {self.SECURITY_STRENGTH} bits, got only {len(entropy) * 8}')
         if len(entropy) * 8 > 2**35:
-            raise RuntimeError('entropy must be at most 2**35 bits')
+            raise RuntimeError(f'entropy must be at most 2**35 bits, got {len(entropy) * 8}')
         if len(nonce) * 8 < self.SECURITY_STRENGTH // 2:
-            raise RuntimeError(f'nonce must have at least {self.SECURITY_STRENGTH // 2} bits')
+            raise RuntimeError(f'nonce must have at least {self.SECURITY_STRENGTH // 2} bits, got only {len(nonce) * 8}')
         if len(perso_str) * 8 > 2**35:
-            raise RuntimeError('perso_str must be at most 2**35 bits')
+            raise RuntimeError(f'perso_str must be at most 2**35 bits got {len(perso_str) * 8}')
         seed_material = bytearray()
         seed_material += entropy
         seed_material += nonce
@@ -106,6 +106,7 @@ class DRBG_SHA2_256(DRBG_SHA2_512):
 
     HASH = 'SHA-256'  # name of the hash as it is specified in NIST CAVP test 'rsp' files
     HASH_DIGEST_SIZE = 256 // 8
+    SECURITY_STRENGTH = 256 // 2
     SEEDLEN = 440
     SEED_SIZE = SEEDLEN // 8
 
@@ -119,6 +120,7 @@ class DRBG_SHA2_224(DRBG_SHA2_512):
 
     HASH = 'SHA-224'  # name of the hash as it is specified in NIST CAVP test 'rsp' files
     HASH_DIGEST_SIZE = 224 // 8
+    SECURITY_STRENGTH = 224 //2
     SEEDLEN = 440
     SEED_SIZE = SEEDLEN // 8
 
@@ -132,6 +134,7 @@ class DRBG_SHA2_384(DRBG_SHA2_512):
 
     HASH = 'SHA-384'  # name of the hash as it is specified in NIST CAVP test 'rsp' files
     HASH_DIGEST_SIZE = 384 // 8
+    SECURITY_STRENGTH = 384 // 2
     SEEDLEN = 888
     SEED_SIZE = SEEDLEN // 8
 
