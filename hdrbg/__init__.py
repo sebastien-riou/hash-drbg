@@ -48,7 +48,9 @@ class DRBG_SHA2_512:
         if len(entropy) * 8 > 2**35:
             raise RuntimeError(f'entropy must be at most 2**35 bits, got {len(entropy) * 8}')
         if len(nonce) * 8 < self.SECURITY_STRENGTH // 2:
-            raise RuntimeError(f'nonce must have at least {self.SECURITY_STRENGTH // 2} bits, got only {len(nonce) * 8}')
+            raise RuntimeError(
+                f'nonce must have at least {self.SECURITY_STRENGTH // 2} bits, got only {len(nonce) * 8}'
+            )
         if len(perso_str) * 8 > 2**35:
             raise RuntimeError(f'perso_str must be at most 2**35 bits got {len(perso_str) * 8}')
         seed_material = bytearray()
@@ -120,7 +122,7 @@ class DRBG_SHA2_224(DRBG_SHA2_512):
 
     HASH = 'SHA-224'  # name of the hash as it is specified in NIST CAVP test 'rsp' files
     HASH_DIGEST_SIZE = 224 // 8
-    SECURITY_STRENGTH = 224 //2
+    SECURITY_STRENGTH = 224 // 2
     SEEDLEN = 440
     SEED_SIZE = SEEDLEN // 8
 
