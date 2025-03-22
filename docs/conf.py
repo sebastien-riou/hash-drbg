@@ -13,7 +13,8 @@ author = 'Sebastien Riou'
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
-import sys, os
+import os
+import sys
 
 # add root of the repo to the search path for modules
 p = os.path.abspath(os.path.join('..'))

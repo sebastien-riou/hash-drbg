@@ -83,10 +83,10 @@ lint.unfixable = [
   # Don't touch unused imports
   "F401",
 ]
-exclude = ["doc","test","dist"]
+exclude = ["docs","test","dist"]
 
 [tool.ruff.lint.isort]
-known-first-party = ["pqsign"]
+known-first-party = ["hdrbg"]
 
 [tool.ruff.lint.flake8-quotes]
 inline-quotes = "single"

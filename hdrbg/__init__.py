@@ -46,11 +46,11 @@ class DRBG_SHA2_512:
         if len(entropy) * 8 < self.SECURITY_STRENGTH:
             raise RuntimeError(f'entropy must have at least {self.SECURITY_STRENGTH} bits')
         if len(entropy) * 8 > 2**35:
-            raise RuntimeError(f'entropy must be at most 2**35 bits')
+            raise RuntimeError('entropy must be at most 2**35 bits')
         if len(nonce) * 8 < self.SECURITY_STRENGTH // 2:
             raise RuntimeError(f'nonce must have at least {self.SECURITY_STRENGTH // 2} bits')
         if len(perso_str) * 8 > 2**35:
-            raise RuntimeError(f'perso_str must be at most 2**35 bits')
+            raise RuntimeError('perso_str must be at most 2**35 bits')
         seed_material = bytearray()
         seed_material += entropy
         seed_material += nonce
