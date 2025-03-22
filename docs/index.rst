@@ -12,7 +12,7 @@ Other online resources:
 
 - `project page on GitHub`_
 - `Download Page`_ with releases
-- This page, when viewed online is at https://hdrbg.readthedocs.io/en/latest/
+- This page, when viewed online is at https://hash-drbg.readthedocs.io/en/latest/
 
 .. _`project page on GitHub`: https://github.com/sebastien-riou/hash-drbg
 .. _`Download Page`: http://pypi.python.org/pypi/hdrbg
