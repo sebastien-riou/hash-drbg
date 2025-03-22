@@ -39,7 +39,7 @@ class DRBG_SHA2_512:
             logging.debug(f'temp = {Utils.hexstr(temp)}')
         return bytes(temp[:out_size])  # or [-out_size:]
 
-    def __init__(self, *, entropy, nonce, perso_str):
+    def __init__(self, *, entropy: bytes, nonce: bytes, perso_str: bytes = bytes(0)):
         seed_material = bytearray()
         seed_material += entropy
         seed_material += nonce
@@ -53,7 +53,7 @@ class DRBG_SHA2_512:
         logging.debug(f'V = {Utils.hexstr(self._V)}')
         logging.debug(f'reseed_counter = {self._reseed_counter}')
 
-    def get_bytes(self, size, *, additional_input: bytes = bytes(0)):
+    def get_bytes(self, size: int, *, additional_input: bytes = bytes(0)):
         if size > self.MAX_REQUEST_SIZE:
             raise RuntimeError(f'Maximum size per request is {self.MAX_REQUEST_SIZE}, {size} bytes were requested')
         if self._reseed_counter > self.RESEED_INTERVAL:
