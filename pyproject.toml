@@ -32,8 +32,8 @@ doc = [
   "sphinx",
 ]
 [project.urls]
-"Homepage" = ""
-"Bug Tracker" = ""
+"Homepage" = "https://github.com/sebastien-riou/hash-drbg"
+"Bug Tracker" = "https://github.com/sebastien-riou/hash-drbg/issues"
 
 
 [tool.black]
