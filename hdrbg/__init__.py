@@ -8,6 +8,7 @@ class DRBG_SHA2_512:
 
     HASH = 'SHA-512'  # name of the hash as it is specified in NIST CAVP test 'rsp' files
     HASH_DIGEST_SIZE = 512 // 8
+    SECURITY_STRENGTH = 256
     SEEDLEN = 888
     SEED_SIZE = SEEDLEN // 8
     RESEED_INTERVAL = 2**48
@@ -40,6 +41,14 @@ class DRBG_SHA2_512:
         return bytes(temp[:out_size])  # or [-out_size:]
 
     def __init__(self, *, entropy: bytes, nonce: bytes, perso_str: bytes = bytes(0)):
+        if len(entropy) * 8 < self.SECURITY_STRENGTH:
+            raise RuntimeError(f'entropy must have at least {self.SECURITY_STRENGTH} bits')
+        if len(entropy) * 8 > 2**35:
+            raise RuntimeError(f'entropy must be at most 2**35 bits')
+        if len(nonce) < self.SECURITY_STRENGTH // 2:
+            raise RuntimeError(f'nonce must have at least {self.SECURITY_STRENGTH // 2} bits')
+        if len(perso_str) * 8 > 2**35:
+            raise RuntimeError(f'perso_str must be at most 2**35 bits')
         seed_material = bytearray()
         seed_material += entropy
         seed_material += nonce
