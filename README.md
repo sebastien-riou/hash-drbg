@@ -12,6 +12,8 @@ SP800-90A Hash DRBG
 
 Pure python implementation of NIST SP800-90A Hash DRBG.
 
+It currently does not implement reseed mechanism.
+
 
 ## Installation
 
