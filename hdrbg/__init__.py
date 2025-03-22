@@ -41,11 +41,13 @@ class DRBG_SHA2_512:
         return bytes(temp[:out_size])  # or [-out_size:]
 
     def __init__(self, *, entropy: bytes, nonce: bytes, perso_str: bytes = bytes(0)):
+        """Initialize a DRBG instance."""
+
         if len(entropy) * 8 < self.SECURITY_STRENGTH:
             raise RuntimeError(f'entropy must have at least {self.SECURITY_STRENGTH} bits')
         if len(entropy) * 8 > 2**35:
             raise RuntimeError(f'entropy must be at most 2**35 bits')
-        if len(nonce) < self.SECURITY_STRENGTH // 2:
+        if len(nonce) * 8 < self.SECURITY_STRENGTH // 2:
             raise RuntimeError(f'nonce must have at least {self.SECURITY_STRENGTH // 2} bits')
         if len(perso_str) * 8 > 2**35:
             raise RuntimeError(f'perso_str must be at most 2**35 bits')
@@ -63,6 +65,8 @@ class DRBG_SHA2_512:
         logging.debug(f'reseed_counter = {self._reseed_counter}')
 
     def get_bytes(self, size: int, *, additional_input: bytes = bytes(0)):
+        """Generate random bytes"""
+
         if size > self.MAX_REQUEST_SIZE:
             raise RuntimeError(f'Maximum size per request is {self.MAX_REQUEST_SIZE}, {size} bytes were requested')
         if self._reseed_counter > self.RESEED_INTERVAL:
