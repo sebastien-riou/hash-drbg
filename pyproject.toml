@@ -68,6 +68,8 @@ lint.ignore = [
   "C901",
   # Allow boolean positional values in function calls, like `dict.get(... True)`
   "FBT003",
+  # Allow the class names to not use CapWords
+  "N801",
   # Ignore checks for possible passwords
   "S105", "S106", "S107",
   #below are those that we would like to deal with in the long term

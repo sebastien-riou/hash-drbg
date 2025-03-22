@@ -1,4 +1,4 @@
-from hashlib import sha1, sha224, sha256, sha384, sha512, sha3_512
+from hashlib import sha224, sha256, sha384, sha512, sha3_512
 import logging
 from pysatl import Utils
 
@@ -70,8 +70,8 @@ class DRBG_SHA2_512:
         out = self._hash_gen(size)
         hin = bytearray([3])
         hin += self._V
-        H = self._hash(hin)
-        self._V = self.add_mod_seedlen(self._V, H, self._C, self._reseed_counter.to_bytes(32, byteorder='big'))
+        h = self._hash(hin)
+        self._V = self.add_mod_seedlen(self._V, h, self._C, self._reseed_counter.to_bytes(32, byteorder='big'))
         self._reseed_counter += 1
         logging.debug(f'C = {Utils.hexstr(self._C)}')
         logging.debug(f'V = {Utils.hexstr(self._V)}')
@@ -81,11 +81,11 @@ class DRBG_SHA2_512:
     def _hash_gen(self, size) -> bytes:
         nloops = (size + self.HASH_DIGEST_SIZE - 1) // self.HASH_DIGEST_SIZE
         data = self._V
-        W = bytearray()
-        for i in range(1, nloops + 1):
-            W += self._hash(data)
+        w = bytearray()
+        for _i in range(1, nloops + 1):
+            w += self._hash(data)
             data = self.add_mod_seedlen(data, bytearray([1]))
-        return bytes(W[:size])  # or [-size:]
+        return bytes(w[:size])  # or [-size:]
 
 
 class DRBG_SHA2_256(DRBG_SHA2_512):
