@@ -13,6 +13,7 @@ class DRBG_SHA2_512:
     SEED_SIZE = SEEDLEN // 8
     RESEED_INTERVAL = 2**48
     MAX_REQUEST_SIZE = (2**19) // 8
+    logger = logging.getLogger(__name__)
 
     @classmethod
     def _hash(cls, data: bytes) -> bytes:
@@ -28,7 +29,7 @@ class DRBG_SHA2_512:
     @classmethod
     def _hash_df(cls, data, out_size) -> bytes:
         nloops = (out_size + cls.HASH_DIGEST_SIZE - 1) // cls.HASH_DIGEST_SIZE
-        logging.debug(f'out_size = {out_size}, cls.HASH_DIGEST_SIZE = {cls.HASH_DIGEST_SIZE}, nloops = {nloops}')
+        cls.logger.debug(f'out_size = {out_size}, cls.HASH_DIGEST_SIZE = {cls.HASH_DIGEST_SIZE}, nloops = {nloops}')
         out_size_in_bits = (8 * out_size).to_bytes(4, byteorder='big')
         temp = bytearray()
         for i in range(1, nloops + 1):
@@ -37,7 +38,7 @@ class DRBG_SHA2_512:
             hin += out_size_in_bits
             hin += data
             temp += cls._hash(hin)
-            logging.debug(f'temp = {Utils.hexstr(temp)}')
+            cls.logger.debug(f'temp = {Utils.hexstr(temp)}')
         return bytes(temp[:out_size])  # or [-out_size:]
 
     def __init__(self, *, entropy: bytes, nonce: bytes, perso_str: bytes = bytes(0)):
@@ -62,9 +63,9 @@ class DRBG_SHA2_512:
         seedc += self._V
         self._C = self._hash_df(seedc, self.SEED_SIZE)
         self._reseed_counter = 1
-        logging.debug(f'C = {Utils.hexstr(self._C)}')
-        logging.debug(f'V = {Utils.hexstr(self._V)}')
-        logging.debug(f'reseed_counter = {self._reseed_counter}')
+        self.logger.debug(f'C = {Utils.hexstr(self._C)}')
+        self.logger.debug(f'V = {Utils.hexstr(self._V)}')
+        self.logger.debug(f'reseed_counter = {self._reseed_counter}')
 
     def get_bytes(self, size: int, *, additional_input: bytes = bytes(0)):
         """Generate random bytes"""
@@ -79,18 +80,18 @@ class DRBG_SHA2_512:
             win += additional_input
             w = self._hash(win)
             self._V = self.add_mod_seedlen(self._V, w)
-            logging.debug(f'C = {Utils.hexstr(self._C)}')
-            logging.debug(f'V = {Utils.hexstr(self._V)}')
-            logging.debug(f'reseed_counter = {self._reseed_counter}')
+            self.logger.debug(f'C = {Utils.hexstr(self._C)}')
+            self.logger.debug(f'V = {Utils.hexstr(self._V)}')
+            self.logger.debug(f'reseed_counter = {self._reseed_counter}')
         out = self._hash_gen(size)
         hin = bytearray([3])
         hin += self._V
         h = self._hash(hin)
         self._V = self.add_mod_seedlen(self._V, h, self._C, self._reseed_counter.to_bytes(32, byteorder='big'))
         self._reseed_counter += 1
-        logging.debug(f'C = {Utils.hexstr(self._C)}')
-        logging.debug(f'V = {Utils.hexstr(self._V)}')
-        logging.debug(f'reseed_counter = {self._reseed_counter}')
+        self.logger.debug(f'C = {Utils.hexstr(self._C)}')
+        self.logger.debug(f'V = {Utils.hexstr(self._V)}')
+        self.logger.debug(f'reseed_counter = {self._reseed_counter}')
         return out
 
     def _hash_gen(self, size) -> bytes:
